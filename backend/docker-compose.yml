@@ -1,0 +1,49 @@
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: real_time_dashboard_api_redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - api_network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: real_time_dashboard_api_server
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    secrets:
+      - jwt_private_key
+      - jwt_public_key
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - api_network
+
+secrets:
+  jwt_private_key:
+    file: ./keys/private.pem
+  jwt_public_key:
+    file: ./keys/public.pem
+
+volumes:
+  redis_data:
+
+networks:
+  api_network:
+    driver: bridge
