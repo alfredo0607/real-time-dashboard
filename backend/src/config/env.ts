@@ -8,14 +8,25 @@ export const env = {
   NODE_ENV: optionalEnv("NODE_ENV", "development"),
   PORT: parseInt(optionalEnv("PORT", "3000"), 10),
 
-  dynamodb: {
+  aws: {
     region: optionalEnv("AWS_REGION", "us-east-1"),
+    accessKeyId: process.env["AWS_ACCESS_KEY_ID"],
+    secretAccessKey: process.env["AWS_SECRET_ACCESS_KEY"],
+  },
+
+  dynamodb: {
     tableName: optionalEnv("DYNAMODB_TABLE_USERS", "Users"),
   },
 
-  aws: {
-    accessKeyId: process.env["AWS_ACCESS_KEY_ID"],
-    secretAccessKey: process.env["AWS_SECRET_ACCESS_KEY"],
+  cloudwatch: {
+    ec2InstanceId: process.env["CW_EC2_INSTANCE_ID"],
+    albDimension: process.env["CW_ALB_DIMENSION"],
+    pollIntervalMs: parseInt(optionalEnv("CW_POLL_INTERVAL_MS", "60000"), 10),
+  },
+
+  streams: {
+    tableName: optionalEnv("DYNAMODB_STREAM_TABLE", ""),
+    pollIntervalMs: parseInt(optionalEnv("STREAMS_POLL_INTERVAL_MS", "1000"), 10),
   },
 
   redis: {

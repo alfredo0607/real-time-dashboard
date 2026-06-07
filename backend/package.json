@@ -19,8 +19,11 @@
   "author": "Ing. Alfredo Dominguez",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-cloudwatch": "^3.787.0",
     "@aws-sdk/client-dynamodb": "^3.787.0",
+    "@aws-sdk/client-dynamodb-streams": "^3.787.0",
     "@aws-sdk/lib-dynamodb": "^3.787.0",
+    "@aws-sdk/util-dynamodb": "^3.996.3",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
@@ -34,6 +37,7 @@
     "swagger-jsdoc": "^6.3.0",
     "swagger-ui-express": "^5.0.1",
     "uuid": "^14.0.0",
+    "ws": "^8.18.3",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -46,6 +50,7 @@
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.8",
     "@types/uuid": "^11.0.0",
+    "@types/ws": "^8.18.1",
     "nodemon": "^3.1.14",
     "ts-node": "^10.9.2",
     "tsx": "^4.22.4",

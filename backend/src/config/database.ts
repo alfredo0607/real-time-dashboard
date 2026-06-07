@@ -8,7 +8,7 @@ import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { env } from "./env";
 
 const clientConfig: ConstructorParameters<typeof DynamoDBClient>[0] = {
-  region: env.dynamodb.region,
+  region: env.aws.region,
 };
 
 if (env.aws.accessKeyId && env.aws.secretAccessKey) {
