@@ -7,6 +7,7 @@ import { env } from "./config/env";
 import { globalRateLimiter } from "./middleware/rateLimiter";
 import { errorHandler } from "./middleware/errorHandler";
 import { router as authRouter } from "./routes/auth.routes";
+import { router as usersRouter } from "./routes/users.routes";
 import { setupSwagger } from "./docs/swagger";
 
 const app: express.Application = express();
@@ -40,6 +41,7 @@ setupSwagger(app);
 
 // 7. Routes
 app.use("/api/auth", authRouter);
+app.use("/api/users", usersRouter);
 
 // 8. Health check
 app.get("/health", (_req, res) => {
