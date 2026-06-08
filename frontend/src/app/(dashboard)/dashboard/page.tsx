@@ -100,7 +100,7 @@ const METRIC_CONFIG: {
     accentColor: "#FB923C",
     bgColor: "#FFF7ED",
     textColor: "#EA580C",
-    description: "EC2 · bytes leídos",
+    description: "EBS · bytes leídos",
   },
   {
     key: "diskWrite",
@@ -112,7 +112,7 @@ const METRIC_CONFIG: {
     accentColor: "#F87171",
     bgColor: "#FEF2F2",
     textColor: "#DC2626",
-    description: "EC2 · bytes escritos",
+    description: "EBS · bytes escritos",
   },
 ];
 

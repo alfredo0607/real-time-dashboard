@@ -22,6 +22,7 @@ function buildQueries(): MetricDataQuery[] {
   const queries: MetricDataQuery[] = [];
 
   const instanceId = env.cloudwatch.ec2InstanceId;
+
   if (!instanceId) return queries;
 
   const ec2Dimension = [{ Name: "InstanceId", Value: instanceId }];
@@ -68,7 +69,7 @@ function buildQueries(): MetricDataQuery[] {
       MetricStat: {
         Metric: {
           Namespace: "AWS/EC2",
-          MetricName: "DiskReadBytes",
+          MetricName: "EBSReadBytes",
           Dimensions: ec2Dimension,
         },
         Period: 60,
@@ -80,7 +81,7 @@ function buildQueries(): MetricDataQuery[] {
       MetricStat: {
         Metric: {
           Namespace: "AWS/EC2",
-          MetricName: "DiskWriteBytes",
+          MetricName: "EBSWriteBytes",
           Dimensions: ec2Dimension,
         },
         Period: 60,
@@ -124,6 +125,8 @@ async function poll(): Promise<void> {
 
     for (const result of MetricDataResults ?? []) {
       if (!result.Id || !result.Values?.length) continue;
+
+      console.log(result);
 
       broadcast({
         type: "metric",
