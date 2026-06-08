@@ -21,69 +21,86 @@ const client = new CloudWatchClient({
 function buildQueries(): MetricDataQuery[] {
   const queries: MetricDataQuery[] = [];
 
-  if (env.cloudwatch.ec2InstanceId) {
-    queries.push({
+  const instanceId = env.cloudwatch.ec2InstanceId;
+  if (!instanceId) return queries;
+
+  const ec2Dimension = [{ Name: "InstanceId", Value: instanceId }];
+
+  queries.push(
+    {
       Id: "cpu",
       MetricStat: {
         Metric: {
           Namespace: "AWS/EC2",
           MetricName: "CPUUtilization",
-          Dimensions: [
-            { Name: "InstanceId", Value: env.cloudwatch.ec2InstanceId },
-          ],
+          Dimensions: ec2Dimension,
         },
         Period: 60,
         Stat: "Average",
       },
-    });
-  }
-
-  if (env.cloudwatch.albDimension) {
-    queries.push(
-      {
-        Id: "requests",
-        MetricStat: {
-          Metric: {
-            Namespace: "AWS/ApplicationELB",
-            MetricName: "RequestCount",
-            Dimensions: [
-              { Name: "LoadBalancer", Value: env.cloudwatch.albDimension },
-            ],
-          },
-          Period: 60,
-          Stat: "Sum",
+    },
+    {
+      Id: "networkIn",
+      MetricStat: {
+        Metric: {
+          Namespace: "AWS/EC2",
+          MetricName: "NetworkIn",
+          Dimensions: ec2Dimension,
         },
+        Period: 60,
+        Stat: "Average",
       },
-      {
-        Id: "latency",
-        MetricStat: {
-          Metric: {
-            Namespace: "AWS/ApplicationELB",
-            MetricName: "TargetResponseTime",
-            Dimensions: [
-              { Name: "LoadBalancer", Value: env.cloudwatch.albDimension },
-            ],
-          },
-          Period: 60,
-          Stat: "p95",
+    },
+    {
+      Id: "networkOut",
+      MetricStat: {
+        Metric: {
+          Namespace: "AWS/EC2",
+          MetricName: "NetworkOut",
+          Dimensions: ec2Dimension,
         },
+        Period: 60,
+        Stat: "Average",
       },
-      {
-        Id: "errors",
-        MetricStat: {
-          Metric: {
-            Namespace: "AWS/ApplicationELB",
-            MetricName: "HTTPCode_ELB_5XX_Count",
-            Dimensions: [
-              { Name: "LoadBalancer", Value: env.cloudwatch.albDimension },
-            ],
-          },
-          Period: 60,
-          Stat: "Sum",
+    },
+    {
+      Id: "diskRead",
+      MetricStat: {
+        Metric: {
+          Namespace: "AWS/EC2",
+          MetricName: "DiskReadBytes",
+          Dimensions: ec2Dimension,
         },
+        Period: 60,
+        Stat: "Average",
       },
-    );
-  }
+    },
+    {
+      Id: "diskWrite",
+      MetricStat: {
+        Metric: {
+          Namespace: "AWS/EC2",
+          MetricName: "DiskWriteBytes",
+          Dimensions: ec2Dimension,
+        },
+        Period: 60,
+        Stat: "Average",
+      },
+    },
+    {
+      // Requires CloudWatch Agent installed on the instance
+      Id: "memory",
+      MetricStat: {
+        Metric: {
+          Namespace: "CWAgent",
+          MetricName: "mem_used_percent",
+          Dimensions: ec2Dimension,
+        },
+        Period: 60,
+        Stat: "Average",
+      },
+    },
+  );
 
   return queries;
 }
@@ -127,11 +144,9 @@ export function startCloudWatchPoller(): void {
   if (timer) return;
 
   const interval = env.cloudwatch.pollIntervalMs;
-  const hasConfig = env.cloudwatch.ec2InstanceId || env.cloudwatch.albDimension;
-
-  if (!hasConfig) {
+  if (!env.cloudwatch.ec2InstanceId) {
     console.log(
-      "⚠ CloudWatch: CW_EC2_INSTANCE_ID o CW_ALB_DIMENSION no configurados — poller inactivo",
+      "⚠ CloudWatch: CW_EC2_INSTANCE_ID no configurado — poller inactivo",
     );
     return;
   }

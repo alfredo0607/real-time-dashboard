@@ -8,9 +8,11 @@ const BACKOFF_MS = [1000, 2000, 4000, 8000, 16000, 30000];
 
 const emptyBuffer = (): MetricsBuffer => ({
   cpu: [],
-  requests: [],
-  latency: [],
-  errors: [],
+  networkIn: [],
+  networkOut: [],
+  diskRead: [],
+  diskWrite: [],
+  memory: [],
 });
 
 type WsMessage =

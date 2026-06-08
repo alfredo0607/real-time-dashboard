@@ -1,6 +1,6 @@
 import WebSocket from "ws";
 
-export type MetricName = "cpu" | "requests" | "latency" | "errors";
+export type MetricName = "cpu" | "networkIn" | "networkOut" | "diskRead" | "diskWrite" | "memory";
 
 export type DashboardMessage =
   | { type: "connected"; message: string }

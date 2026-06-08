@@ -135,7 +135,10 @@ export async function startDynamoStreamsListener(): Promise<void> {
 
     await initShards(streamArn);
 
-    pollTimer = setInterval(() => void pollRecords(), env.streams.pollIntervalMs);
+    pollTimer = setInterval(
+      () => void pollRecords(),
+      env.streams.pollIntervalMs,
+    );
 
     // Re-detecta nuevos shards cada 60s (por shard splits/merges)
     reinitTimer = setInterval(async () => {

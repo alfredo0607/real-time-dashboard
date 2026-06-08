@@ -26,7 +26,7 @@ export interface AuthData extends AuthTokens {
   user: AuthUser;
 }
 
-export type MetricName = "cpu" | "requests" | "latency" | "errors";
+export type MetricName = "cpu" | "networkIn" | "networkOut" | "diskRead" | "diskWrite" | "memory";
 
 export interface MetricPoint {
   timestamp: string;

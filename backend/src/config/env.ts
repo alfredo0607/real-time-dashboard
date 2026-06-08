@@ -20,7 +20,6 @@ export const env = {
 
   cloudwatch: {
     ec2InstanceId: process.env["CW_EC2_INSTANCE_ID"],
-    albDimension: process.env["CW_ALB_DIMENSION"],
     pollIntervalMs: parseInt(optionalEnv("CW_POLL_INTERVAL_MS", "60000"), 10),
   },
 
