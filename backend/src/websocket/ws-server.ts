@@ -12,7 +12,10 @@ export function initWebSocketServer(httpServer: HttpServer): void {
     addClient(ws);
 
     ws.send(
-      JSON.stringify({ type: "connected", message: "Dashboard stream connected" }),
+      JSON.stringify({
+        type: "connected",
+        message: "Dashboard stream connected",
+      }),
     );
 
     ws.on("close", () => {

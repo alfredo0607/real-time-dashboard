@@ -90,6 +90,7 @@ function buildQueries(): MetricDataQuery[] {
 
 async function poll(): Promise<void> {
   const queries = buildQueries();
+
   if (queries.length === 0) return;
 
   const endTime = new Date();
@@ -137,9 +138,7 @@ export function startCloudWatchPoller(): void {
 
   void poll();
   timer = setInterval(() => void poll(), interval);
-  console.log(
-    `✓ CloudWatch poller iniciado (cada ${interval / 1000}s)`,
-  );
+  console.log(`✓ CloudWatch poller iniciado (cada ${interval / 1000}s)`);
 }
 
 export function stopCloudWatchPoller(): void {

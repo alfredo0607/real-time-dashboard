@@ -19,8 +19,7 @@ app.use(helmet());
 // 2. CORS
 app.use(
   cors({
-    origin: "*",
-    // origin: env.cors.origins,
+    origin: env.cors.origins,
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   }),
