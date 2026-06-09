@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import type { MetricName, MetricPoint, MetricsBuffer, WsStatus, StreamEvent } from "@/types";
+import type {
+  MetricName,
+  MetricPoint,
+  MetricsBuffer,
+  WsStatus,
+  StreamEvent,
+} from "@/types";
 
 const BUFFER_SIZE = 60;
 const BACKOFF_MS = [1000, 2000, 4000, 8000, 16000, 30000];
@@ -49,7 +55,10 @@ export function useMetricsStream(wsUrl: string) {
         const msg = JSON.parse(evt.data) as WsMessage;
 
         if (msg.type === "metric") {
-          const point: MetricPoint = { timestamp: msg.timestamp, value: msg.value };
+          const point: MetricPoint = {
+            timestamp: msg.timestamp,
+            value: msg.value,
+          };
           setMetrics((prev) => ({
             ...prev,
             [msg.name]: [...prev[msg.name].slice(-(BUFFER_SIZE - 1)), point],

@@ -106,13 +106,13 @@ function buildQueries(): MetricDataQuery[] {
   return queries;
 }
 
-async function poll(): Promise<void> {
+async function poll(lookbackMs: number = env.cloudwatch.pollIntervalMs): Promise<void> {
   const queries = buildQueries();
 
   if (queries.length === 0) return;
 
   const endTime = new Date();
-  const startTime = new Date(endTime.getTime() - env.cloudwatch.pollIntervalMs);
+  const startTime = new Date(endTime.getTime() - lookbackMs);
 
   try {
     const { MetricDataResults } = await client.send(
@@ -126,13 +126,21 @@ async function poll(): Promise<void> {
     for (const result of MetricDataResults ?? []) {
       if (!result.Id || !result.Values?.length) continue;
 
-      broadcast({
-        type: "metric",
-        name: result.Id as MetricName,
-        value: result.Values[0],
-        timestamp:
-          result.Timestamps?.[0]?.toISOString() ?? endTime.toISOString(),
-      });
+      // CloudWatch devuelve los puntos de más reciente a más antiguo; revertir
+      // para emitirlos en orden cronológico y que el buffer del cliente quede bien.
+      const points = result.Values.map((value, i) => ({
+        value,
+        timestamp: result.Timestamps?.[i]?.toISOString() ?? endTime.toISOString(),
+      })).reverse();
+
+      for (const point of points) {
+        broadcast({
+          type: "metric",
+          name: result.Id as MetricName,
+          value: point.value,
+          timestamp: point.timestamp,
+        });
+      }
     }
   } catch (err) {
     console.error("CloudWatch poll error:", err);
@@ -152,7 +160,7 @@ export function startCloudWatchPoller(): void {
     return;
   }
 
-  void poll();
+  void poll(60 * 60 * 1000); // fetch inicial: última hora para poblar las gráficas
   timer = setInterval(() => void poll(), interval);
   console.log(`✓ CloudWatch poller iniciado (cada ${interval / 1000}s)`);
 }

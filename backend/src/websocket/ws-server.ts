@@ -1,6 +1,6 @@
 import { Server as HttpServer } from "http";
 import { WebSocketServer } from "ws";
-import { addClient, removeClient } from "./broadcaster";
+import { addClient, removeClient, sendSnapshot } from "./broadcaster";
 
 export function initWebSocketServer(httpServer: HttpServer): void {
   const wss = new WebSocketServer({ server: httpServer, path: "/ws" });
@@ -10,6 +10,7 @@ export function initWebSocketServer(httpServer: HttpServer): void {
     console.log(`WS client connected [${ip}] — total: ${wss.clients.size}`);
 
     addClient(ws);
+    sendSnapshot(ws);
 
     ws.send(
       JSON.stringify({
