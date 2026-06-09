@@ -6,7 +6,7 @@ import { AuthProvider } from "@/context/AuthContext";
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
 
 export const metadata: Metadata = {
-  title: "Real-Time Dashboard | Bartik Ingeniería",
+  title: "Real-Time Dashboard | Ing. Alfredo Dominguez",
   description:
     "Dashboard en tiempo real con métricas AWS CloudWatch y DynamoDB Streams",
 };

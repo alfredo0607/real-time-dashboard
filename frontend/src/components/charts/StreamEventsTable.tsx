@@ -28,8 +28,8 @@ export function StreamEventsTable({ events }: Props) {
           <tr className="border-b border-gray-200 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
             <th className="pb-2 pr-4">Evento</th>
             <th className="pb-2 pr-4">Tabla</th>
-            <th className="pb-2 pr-4">Keys</th>
-            <th className="pb-2 pr-4">Datos</th>
+            <th className="hidden pb-2 pr-4 sm:table-cell">Keys</th>
+            <th className="hidden pb-2 pr-4 md:table-cell">Datos</th>
             <th className="pb-2">Timestamp</th>
           </tr>
         </thead>
@@ -46,11 +46,13 @@ export function StreamEventsTable({ events }: Props) {
               <td className="py-2 pr-4 font-mono text-xs text-gray-500">
                 {evt.tableName}
               </td>
-              <td className="py-2 pr-4 font-mono text-xs text-gray-600">
+              <td className="hidden py-2 pr-4 font-mono text-xs text-gray-600 sm:table-cell">
                 {JSON.stringify(evt.keys)}
               </td>
-              <td className="py-2 pr-4 font-mono text-xs text-gray-500 max-w-xs truncate">
-                {evt.newImage ? JSON.stringify(evt.newImage) : "—"}
+              <td className="hidden py-2 pr-4 font-mono text-xs text-gray-500 md:table-cell">
+                <span className="block max-w-xs truncate">
+                  {evt.newImage ? JSON.stringify(evt.newImage) : "—"}
+                </span>
               </td>
               <td className="py-2 text-xs text-gray-400">
                 {new Date(evt.timestamp).toLocaleTimeString("es-MX")}

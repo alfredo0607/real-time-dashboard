@@ -30,7 +30,7 @@ export function MetricCard({
 
   return (
     <div
-      className="relative overflow-hidden rounded-2xl bg-white p-5 shadow-sm ring-1 ring-surface-border transition-shadow hover:shadow-md"
+      className="relative overflow-hidden rounded-2xl bg-white p-3 shadow-sm ring-1 ring-surface-border transition-shadow hover:shadow-md sm:p-5"
     >
       {/* Top accent stripe */}
       <div
@@ -43,10 +43,10 @@ export function MetricCard({
           <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
             {title}
           </p>
-          <p className="mt-2 text-3xl font-bold tracking-tight" style={{ color: textColor }}>
+          <p className="mt-2 text-xl font-bold tracking-tight sm:text-3xl" style={{ color: textColor }}>
             {formatted}
             {value !== null && (
-              <span className="ml-1 text-base font-normal text-gray-400">
+              <span className="ml-1 text-sm font-normal text-gray-400 sm:text-base">
                 {unit}
               </span>
             )}
@@ -57,7 +57,7 @@ export function MetricCard({
         </div>
 
         <div
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-xl"
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-base sm:h-11 sm:w-11 sm:rounded-xl sm:text-xl"
           style={{ backgroundColor: bgColor }}
         >
           {icon}
