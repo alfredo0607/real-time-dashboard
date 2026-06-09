@@ -126,8 +126,6 @@ async function poll(): Promise<void> {
     for (const result of MetricDataResults ?? []) {
       if (!result.Id || !result.Values?.length) continue;
 
-      console.log(result);
-
       broadcast({
         type: "metric",
         name: result.Id as MetricName,
